@@ -1,0 +1,87 @@
+<!--Menu de escolas favoritas-->
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Escolas favoritas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list *ngIf="escolasFavoritas">
+      <ion-item  *ngFor="let escola of escolasFavoritas; let i = index">
+        <ion-card class="card-content">
+          <ion-card-header class="card-favs">
+            {{ escola.noEntidade }}
+            <ion-button (click)="removerDasFavoritas(escola)" color="danger">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-card-header>
+          
+        </ion-card>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+
+<!--Header da pagina-->
+<div class="ion-page" id="main-content">
+  <ion-header [translucent]="true">
+    <ion-toolbar color="primary">
+
+      <ion-buttons slot="start">
+        <ion-menu-button (click)="carregarEscolasFavoritas()">
+          <ion-icon name="heart-outline"></ion-icon>
+        </ion-menu-button>
+      </ion-buttons>
+      
+      <ion-title class="main-title" (click)="carregarEscolas()">
+        Escolas
+      </ion-title>
+    </ion-toolbar>
+    <ion-searchbar #searchBar class="search-bar" (keyup.enter)="carregarEscolas(searchBar.value)"></ion-searchbar>
+  </ion-header>
+
+  <!--Cards das escolas-->
+  <ion-content>
+    <ion-list *ngIf="escolas">
+      <ion-item class="list-item" *ngFor="let escola of escolas; let i = index">
+        <ion-card class="card-content">
+          <ion-card-header class="ion-text-center">
+            {{ escola.noEntidade }}
+          </ion-card-header>
+          <ion-card-content class="card-escolas">
+            <p class="ion-text-center">Número da Escola: {{ escola.coEntidade }}</p>
+            <ion-button (click)="setOpen(i)" class="main-button" color="primary">Informações</ion-button>
+
+            <!--Modal para exibir as informações das escolas-->
+            <ion-modal [isOpen]="modalsOpen[i]">
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar color="primary">
+                    <ion-title>Dados Escola</ion-title>
+                    <ion-buttons slot="end">
+                      <ion-button (click)="setOpen(i)">Fechar</ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-content class="ion-padding">
+
+                  <ion-button expand="block" (click)="favoritarEscola(escola)" color="success">Favoritar</ion-button>
+                  <!--Lista das infos-->
+                  <ion-list [inset]="true">
+                    <ion-item *ngFor="let key of getObjectKeys(escola)">
+                      <ion-label>{{ key }}: {{ escola[key] }}</ion-label>
+                    </ion-item>
+                  </ion-list>
+
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+
+</div>
